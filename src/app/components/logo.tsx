@@ -1,4 +1,5 @@
 "use client";
+import { get } from "http";
 import React, { useState, useEffect, useRef } from "react";
 
 type ChunkPosition = [number, number];
@@ -16,7 +17,7 @@ const LOGO_STRUCTURE: Chunk[] = [
   {
     letters: "HA",
     coordinateSets: {
-      "expanded-up": [0, 3],
+      "expanded-up": [0, 3], // logo state
       "descending-grid": [0, 0],
       "expanded-down": [0, 0],
       collapsed: [0, 0],
@@ -109,17 +110,36 @@ type CoordinateSetKey =
   | "collapsed";
 
 const SCROLL_THRESHOLD = 0.8; // 80% scroll threshold
-const EXPANDED_DELAY = 3000; // 3 seconds
+const EXPANDED_DELAY = 800; // delay to expand after scrolling stops
 
-const AnimatedLogo: React.FC = () => {
-  const [state, setState] = useState<LogoState>("initial");
+interface AnimatedLogoProps {
+  initialState?: LogoState; // Allow developers to set the initial state
+}
+
+const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
+  initialState = "initial",
+}) => {
+  const [state, setState] = useState<LogoState>(initialState);
   const [progress, setProgress] = useState(0);
   const logoRef = useRef<HTMLDivElement>(null);
   const lastScrollTime = useRef(Date.now());
   const expandedTimer = useRef<NodeJS.Timeout | null>(null);
 
+  const cycleStates = () => {
+    const stateOrder: LogoState[] = [
+      "initial",
+      "expanded",
+      "scrolling-start",
+      "scrolling-mid",
+      "scrolling-end",
+    ];
+    const currentIndex = stateOrder.indexOf(state);
+    const nextIndex = (currentIndex + 1) % stateOrder.length;
+    setState(stateOrder[nextIndex]);
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => setState("expanded"), 3000);
+    const timer = setTimeout(() => setState("expanded"), 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -189,7 +209,7 @@ const AnimatedLogo: React.FC = () => {
     }
   };
 
-  const getChunkStyle = (chunk: Chunk) => {
+  const getChunkStyle = (chunk: Chunk, index: number) => {
     const currentSet = getCoordinateSet(state);
     const targetPosition = chunk.coordinateSets[currentSet];
     const previousSet = getCoordinateSet(
@@ -203,27 +223,37 @@ const AnimatedLogo: React.FC = () => {
     const y =
       previousPosition[1] +
       (targetPosition[1] - previousPosition[1]) * progress;
+    const delay = `${index * 100}ms`; // Stagger animation based on index
 
     return {
       display: "inline-block",
       position: "absolute" as const,
       left: `${x}ch`,
       top: `${y}em`,
-      transition: state === "initial" ? "none" : "all 0.5s ease-in-out",
+      transition:
+        state === "initial" ? "none" : `all 0.5s ease-in-out ${delay}`,
     };
   };
 
+  const handleClick = () => {
+    cycleStates();
+    console.log(state, 'state');
+    console.log(getCoordinateSet(state), 'coordinate set');
+  };
+
+  console.log(state,'state')
+
   return (
-    <div
-      ref={logoRef}
-    >
+    <div ref={logoRef} onClick={handleClick} className="cursor-pointer">
       {LOGO_STRUCTURE.map((chunk, index) => (
         <span
           key={index}
-          className={`transition-opacity duration-200 ${
-            state === "initial" ? "opacity-0" : "opacity-100"
+          className={`transition-all duration-200 ${
+            state === "initial"
+              ? "opacity-0 translate-y-3"
+              : "opacity-100 translate-y-0"
           }`}
-          style={getChunkStyle(chunk)}
+          style={getChunkStyle(chunk, index)}
         >
           {chunk.letters}
         </span>
@@ -233,3 +263,7 @@ const AnimatedLogo: React.FC = () => {
 };
 
 export default AnimatedLogo;
+// TODOs
+// tweak logo scroll animation: idea -> tie animation to scroll for set amount of value, something like equal to height of logo? that way it feels like user controls the animation
+// add hover for logo --> when its expanded, collapse it --> when it's collapsed, expand it
+// add dev feature so dev can set state for designing

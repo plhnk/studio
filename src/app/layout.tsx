@@ -32,13 +32,13 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className={fira_code.className + " main-grid py-8"}>
-        <Grid />
         <header className="fixed">
           <AnimatedLogo />
         </header>
         <nav className="fixed bottom-8">nav</nav>
         <main className="col-span-full pt-64">{children}</main>
         <footer className="h-dvh">Designed &amp; Built in the PNW</footer>
+        <Grid />
       </body>
     </html>
   );
