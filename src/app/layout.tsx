@@ -1,8 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fira_Code, Fira_Sans } from "next/font/google";
 import "./globals.css";
+import Grid from "./components/grid";
+import AnimatedLogo from "./components/logo";
 
-const inter = Inter({ subsets: ["latin"] });
+const fira_code = Fira_Code({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-fira-code",
+});
+
+const fira_sans = Fira_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-fira-sans",
+  weight: ["200", "400", "600", "900"],
+  style: ["normal", "italic"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head></head>
+      <body className={fira_code.className + " main-grid py-8"}>
+        <Grid />
+        <header className="fixed">
+          <AnimatedLogo />
+        </header>
+        <nav className="fixed bottom-8">nav</nav>
+        <main className="col-span-full pt-64">{children}</main>
+        <footer className="h-dvh">Designed &amp; Built in the PNW</footer>
+      </body>
     </html>
   );
 }
