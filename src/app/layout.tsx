@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Code, Fira_Sans } from "next/font/google";
 import "./globals.css";
 import Grid from "./components/grid";
-import AnimatedLogo from "./components/logo";
+import Header from "./components/ui/header";
 
 const fira_code = Fira_Code({
   subsets: ["latin"],
@@ -32,13 +32,11 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className={fira_code.className + " main-grid py-8"}>
-        <header className="fixed">
-          <AnimatedLogo />
-        </header>
+        <Header className="fixed top-0 left-0 right-0 p-8 h-40" />
         <nav className="fixed bottom-8">nav</nav>
         <main className="col-span-full pt-64">{children}</main>
         <footer className="h-dvh">Designed &amp; Built in the PNW</footer>
-        <Grid />
+        <Grid className="h-svh w-svw" />
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { get } from "http";
+import { cn } from "@/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
 
 type ChunkPosition = [number, number];
@@ -113,11 +113,13 @@ const SCROLL_THRESHOLD = 0.8; // 80% scroll threshold
 const EXPANDED_DELAY = 800; // delay to expand after scrolling stops
 
 interface AnimatedLogoProps {
+  className?: string;
   initialState?: LogoState; // Allow developers to set the initial state
 }
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   initialState = "initial",
+  className,
 }) => {
   const [state, setState] = useState<LogoState>(initialState);
   const [progress, setProgress] = useState(0);
@@ -237,14 +239,16 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   const handleClick = () => {
     cycleStates();
-    console.log(state, 'state');
-    console.log(getCoordinateSet(state), 'coordinate set');
+    console.log(state, "state");
+    console.log(getCoordinateSet(state), "coordinate set");
   };
 
-  console.log(state,'state')
-
   return (
-    <div ref={logoRef} onClick={handleClick} className="cursor-pointer">
+    <div
+      ref={logoRef}
+      onClick={handleClick}
+      className={cn("cursor-pointer", className)}
+    >
       {LOGO_STRUCTURE.map((chunk, index) => (
         <span
           key={index}
