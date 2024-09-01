@@ -4,7 +4,6 @@ import "./globals.css";
 import Grid from "./components/grid";
 import Header from "./components/ui/header";
 import Navbar from "./components/ui/navbar";
-import OnPageNav from "./components/ui/on-page-nav";
 
 const fira_code = Fira_Code({
   subsets: ["latin"],

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Services from "./components/services";
 
 export default function Home() {
   return (
@@ -12,6 +13,9 @@ export default function Home() {
           <a>Sounds good, let’s talk</a>
           <a>Tell me more</a>
         </div>
+      </section>
+      <section>
+        <Services />
       </section>
     </main>
   );
