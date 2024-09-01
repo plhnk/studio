@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 const Grid = ({ className }: { className?: string }) => {
-  const baseBorder = `border-l-2 border-r-2 border-neutral-100 h-full w-full`;
+  const baseBorder = `border-l border-r border-neutral-200 h-full w-full`;
   const mdBorders = `hidden md:block ${baseBorder}`;
   const lgBorders = `hidden lg:block ${baseBorder}`;
   const xlBorders = `hidden xl:block ${baseBorder}`;

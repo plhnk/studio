@@ -3,6 +3,8 @@ import { Fira_Code, Fira_Sans } from "next/font/google";
 import "./globals.css";
 import Grid from "./components/grid";
 import Header from "./components/ui/header";
+import Navbar from "./components/ui/navbar";
+import OnPageNav from "./components/ui/on-page-nav";
 
 const fira_code = Fira_Code({
   subsets: ["latin"],
@@ -33,7 +35,7 @@ export default function RootLayout({
       <head></head>
       <body className={fira_code.className + " main-grid py-8"}>
         <Header className="fixed top-0 left-0 right-0 p-8 h-40" />
-        <nav className="fixed bottom-8">nav</nav>
+        <Navbar className="fixed bottom-4 left-3 right-3" />
         <main className="col-span-full pt-64">{children}</main>
         <footer className="h-dvh">Designed &amp; Built in the PNW</footer>
         <Grid className="h-svh w-svw" />
