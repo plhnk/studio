@@ -54,13 +54,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       <h2 className="relative text-2xl font-bold mb-4">{title}</h2>
       <h3 className="text-lg text-gray-700 mb-4">{subtitle}</h3>
       <div className="mb-4">
-        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-1">
+        <p className="small-caps text-gray-500 mb-1">
           Deliverable
         </p>
         <p>{deliverable}</p>
       </div>
       <div>
-        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-1">
+        <p className="small-caps text-gray-500 mb-1">
           For example
         </p>
         <p>{example}</p>

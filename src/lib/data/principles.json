@@ -1,0 +1,49 @@
+[
+  {
+    "title": "Omotenashi",
+    "hiragana": "おもてなし",
+    "kanji": "御持て成し",
+    "description": [
+      "The concept of wholehearted, selfless giving, attention to detail, and anticipation of others' needs all without an expectation of a return or even of being noticed."
+    ],
+    "summary": "We *practice radical hospitality*."
+  },
+  {
+    "title": "Mottainai",
+    "hiragana": "もったいない",
+    "kanji": "勿体無い)",
+    "description": [
+      "The spirit of appreciating what you have been entrusted with and showing respect for what you have been entrusted with and the one who has entrusted it to you."
+    ],
+    "summary": "We *practice good stewardship*."
+  },
+  {
+    "title": "Shokunin",
+    "hiragana": "しょくにん",
+    "kanji": "職人",
+    "description": [
+      "The Japanese word for 'Craftsman', it is being dedicated to the work itself, and seeing it done excellently all the way through.",
+      "It is taking the time to do things right, especially when no one will notice because it is good for your own soul."
+    ],
+    "summary": "We *mind the details*."
+  },
+  {
+    "title": "Wabi-sabi",
+    "hiragana": "わびさび",
+    "kanji": "侘び寂び",
+    "description": [
+      "Perfectly imperfect — simple yet complex — recognizing the pursuit of perfection is vain.",
+      "There is always something you can improve, at the same time taking satisfaction in simply achieving the work set before you, and doing it well."
+    ],
+    "summary": "We *get things done*."
+  },
+  {
+    "title": "Shoshin",
+    "hiragana": "しょしん",
+    "kanji": "初心",
+    "description": [
+      "Meaning \"beginner's mind\", it is an inquisitive approach to problems, seeking first to understand, exploring all solutions, avoiding preconceived notions and premature judgements before connecting the dots, some for the first time, to a path forward."
+    ],
+    "summary": "We *are curious*."
+  }
+]

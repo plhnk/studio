@@ -28,23 +28,18 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
           <button className="bg-neutral-200/50 hover:bg-red-600 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full">Contact</button>
         </li>
         <li>
-          <Link className="px-4 py-2 hover:text-red-500" href="#what">
+          <Link href="#What" className="px-4 py-2 hover:text-red-500">
             What
           </Link>
         </li>
         <li>
-          <Link className="px-4 py-2 hover:text-red-500" href="#how">
+          <Link href="#How" className="px-4 py-2 hover:text-red-500">
             How
           </Link>
         </li>
         <li>
-          <Link className="px-4 py-2 hover:text-red-500" href="#why">
+          <Link href="#Why" className="px-4 py-2 hover:text-red-500">
             Why
-          </Link>
-        </li>
-        <li>
-          <Link className="px-4 py-2 hover:text-red-500" href="#who">
-            Who
           </Link>
         </li>
       </ul>
@@ -53,3 +48,5 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
 };
 
 export default Navbar;
+// TODO
+// have navbar hidden initially, then appear shortly after scrolling

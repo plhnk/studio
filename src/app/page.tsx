@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Services from "./components/services";
+import Principles from "./components/principles";
 
 export default function Home() {
   return (
@@ -9,14 +10,13 @@ export default function Home() {
           Sustainably grow <br /> your business <br /> by design <br /> with
           technology.
         </h1>
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-16 mb-80">
           <a>Sounds good, let’s talk</a>
           <a>Tell me more</a>
         </div>
       </section>
-      <section>
-        <Services />
-      </section>
+      <Services />
+      <Principles />
     </main>
   );
 }
