@@ -35,9 +35,9 @@ export default function RootLayout({
       <body className={fira_code.className + " main-grid py-8"}>
         <Header className="fixed top-0 left-0 right-0 p-4 md:p-8 h-40 z-50" /> 
         {/* grid-def */}
-        <Navbar className="fixed bottom-4 left-2 right-2 z-50" />
+        <Navbar className="z-50" />
         {/* grid-def */}
-        <main className="col-span-full py-64">{children}</main>
+        <main className="col-span-full">{children}</main>
         <footer className="mb-32">Designed &amp; Built in the PNW</footer>
         <Grid className="h-svh w-svw" />
       </body>
