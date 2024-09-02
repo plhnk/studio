@@ -1,5 +1,5 @@
-import Services from "./components/services";
-import Principles from "./components/principles";
+import Services from "../components/services";
+import Principles from "../components/principles";
 
 export default function Home() {
   return (
