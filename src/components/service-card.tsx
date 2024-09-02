@@ -55,16 +55,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           name={illustrationName}
         />
       </div>
-      <h2 className="-ml-1 relative text-6xl uppercase">{title}</h2>
-      <h3 className="text-lg text-neutral-500 leading-snug mb-16">
+      <h2 className="-ml-1 relative text-6xl uppercase text-merino-950">{title}</h2>
+      <h3 className="text-lg text-merino-900 leading-snug mb-16">
         {subtitle}
       </h3>
       <div className="">
-        <p className="small-caps text-neutral-300 mb-4">Deliverable</p>
+        <p className="small-caps text-neutral-400 mb-4">Deliverable</p>
         <p>{deliverable}</p>
       </div>
       <div>
-        <p className="small-caps text-neutral-300 mb-4">For example</p>
+        <p className="small-caps text-neutral-400 mb-4">For example</p>
         {example.map((line, index) => (
           <p className="text-pretty mb-4" key={index}>
             {line}
