@@ -100,13 +100,13 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         </li>
         <li
           className={cn(
-            "absolute -left-14 top-0 bottom-0 flex items-center justify-center outline outline-1 -outline-offset-1 outline-neutral-100 rounded-full p-1 transition-opacity duration-300 ease-in-out",
+            "absolute backdrop-blur-md -left-14 top-0 bottom-0 flex items-center justify-center outline outline-1 -outline-offset-1 outline-neutral-100 rounded-full p-1 transition-opacity duration-300 ease-in-out",
             showScrollButton ? "opacity-100" : "opacity-0"
           )}
         >
           <button
             onClick={onPageNav("#Welcome", 0)}
-            className="group rounded-full p-2 backdrop-blur-md bg-neutral-200/50 hover:bg-neutral-900"
+            className="group rounded-full p-2 bg-neutral-200/50 hover:bg-neutral-900"
           >
             <MoveUp className="text-neutral-800 group-hover:text-white transition-all duration-200 ease-in-out" />
           </button>

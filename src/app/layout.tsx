@@ -55,7 +55,7 @@ export default function RootLayout({
         {/* grid-def */}
         <main className="col-span-full grid grid-cols-subgrid">{children}</main>
         <footer className="mb-32 col-span-full">Designed &amp; Built in the PNW</footer>
-        <Grid className="h-svh w-svw" />
+        <Grid className="h-screen w-screen" />
       </body>
     </html>
   );
