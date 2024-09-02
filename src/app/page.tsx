@@ -1,12 +1,11 @@
-import Image from "next/image";
 import Services from "./components/services";
 import Principles from "./components/principles";
 
 export default function Home() {
   return (
-    <main className="">
+    <main>
       <section id="#Welcome">
-        <h1 className="text-[8.5vw] leading-tight mb-8">
+        <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mb-8">
           Sustainably grow <br /> your business <br /> by design <br /> with
           technology.
         </h1>
@@ -18,8 +17,9 @@ export default function Home() {
       <Services />
       <Principles />
       <section id="#Why">
-        <h1 className="text-[8.5vw] leading-tight mb-8">
-          I believe <br /> we can all <br /> do better.
+        <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mb-8">
+          I believe we can <br />  all do better.
+          {/* I believe <br /> we can all <br /> do better. */}
         </h1>
         <p>
           Since childhood, I have had an innate desire to build, grow, and

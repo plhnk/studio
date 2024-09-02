@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 
 interface PrincipleCardProps {
@@ -49,21 +49,23 @@ const PrincipleCard: React.FC<PrincipleCardProps> = ({
   return (
     <section
       ref={cardRef}
-      className={`relative transition-opacity duration-700 ease-in-out ${
+      className={`flex flex-col gap-16 relative transition-opacity duration-700 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="relative">
-        <h1 className="text-3xl font-bold mb-4 relative z-10">{title}</h1>
-        <p className="absolute inset-0 text-6xl font-bold text-gray-200 z-0 leading-none">
+      <div className="relative mb-16">
+        <h1 className="-ml-0.5 text-4xl relative z-10">{title}</h1>
+        <span className="absolute text-nowrap text-8xl text-gray-100 z-0 pl-2.5 -left-8 -top-8 w-dvw overflow-hidden"> 
           {hiragana}
-        </p>
+        </span>
       </div>
-      {description.map((desc, index) => (
-        <p key={index} className="text-lg text-gray-700 mb-4">
-          {desc}
-        </p>
-      ))}
+      <div>
+        {description.map((desc, index) => (
+          <p key={index} className="text-lg text-gray-700 mb-4">
+            {desc}
+          </p>
+        ))}
+      </div>
       <p className="text-md text-gray-800">{parseBoldText(summary)}</p>
     </section>
   );

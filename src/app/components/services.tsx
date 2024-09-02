@@ -6,7 +6,7 @@ import servicesData from "@/lib/data/services.json";
 const Services: React.FC = () => {
   return (
     <article id="#What" className='mb-80'>
-      <h1 className='small-caps mb-16'>What We Do</h1>
+      <h1 className='small-caps mb-16 text-neutral-600'>What We Do</h1>
       <div className="grid gap-80">
         {servicesData.map((service, index) => (
           <ServiceCard
@@ -14,7 +14,7 @@ const Services: React.FC = () => {
             title={service.title}
             subtitle={service.subtitle}
             deliverable={service.deliverable}
-            example={service.example.join(" ")}
+            example={service.example}
           />
         ))}
       </div>

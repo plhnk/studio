@@ -24,7 +24,7 @@
       "You have mockups for a website.",
       "I help you by ensuring those mockups are ready to be developed, and then bring it to life with code on the platform of your choice.",
       "I can tie into an existing content management system like Wordpress, or give you a lightning-fast custom experience with Sanity, Contentful, or maybe something even cooler like using Apple Notes or Notion to manage your content.",
-      "I don't really do any crazy backend stuff, but I am happy to work with a dev team to make it happen."
+      "I don’t really do any crazy backend stuff, but I am happy to work with a dev team to make it happen."
     ]
   },
   {
@@ -41,7 +41,7 @@
     "subtitle": "You have an application that works, but you want it to be better. I help you make it better.",
     "deliverable": "Increased profits, or whatever metric you're aiming for.",
     "example": [
-      "Your app is slow and you don't have enough people using it.",
+      "Your app is slow and you don’t have enough people using it.",
       "I help you understand why these things are happening, give you ideas for how to make numbers go in the right direction, run experiments to see how good the ideas are, and then implement the ones that work."
     ]
   }

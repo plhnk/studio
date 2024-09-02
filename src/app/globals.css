@@ -23,7 +23,7 @@ body {
     text-wrap: balance;
   }
   .small-caps {
-    @apply text-sm font-semibold uppercase tracking-wide;
+    @apply text-sm font-semibold uppercase tracking-widest;
     font-variant-caps: small-caps;
   }
 }

@@ -5,7 +5,7 @@ interface ServiceCardProps {
   title: string;
   subtitle: string;
   deliverable: string;
-  example: string;
+  example: string[];
   svgElement?: React.ReactNode;
 }
 
@@ -44,26 +44,24 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   return (
     <article
       ref={ServicecardRef}
-      className={`relative transition-opacity duration-700 ease-in-out ${
+      className={`flex flex-col gap-16 relative transition-opacity duration-700 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
       {svgElement && (
         <div className="absolute inset-0 opacity-20">{svgElement}</div>
       )}
-      <h2 className="relative text-2xl font-bold mb-4">{title}</h2>
-      <h3 className="text-lg text-gray-700 mb-4">{subtitle}</h3>
-      <div className="mb-4">
-        <p className="small-caps text-gray-500 mb-1">
-          Deliverable
-        </p>
+      <h2 className="-ml-1 relative text-6xl uppercase">{title}</h2>
+      <h3 className="text-lg text-neutral-500 leading-snug mb-16">{subtitle}</h3>
+      <div className="">
+        <p className="small-caps text-neutral-300 mb-4">Deliverable</p>
         <p>{deliverable}</p>
       </div>
       <div>
-        <p className="small-caps text-gray-500 mb-1">
-          For example
-        </p>
-        <p>{example}</p>
+        <p className="small-caps text-neutral-300 mb-4">For example</p>
+        {example.map((line, index) => (
+          <p className='mb-4' key={index}>{line}</p>
+        ))}
       </div>
     </article>
   );
