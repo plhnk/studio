@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <section
-        id="#Welcome"
+        id="Welcome"
         className="h-dvh flex flex-col justify-between pb-3"
       >
         <div className="flex flex-col gap-16 my-32">
