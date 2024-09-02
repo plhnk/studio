@@ -16,14 +16,14 @@ export default function Home() {
             Sustainably grow <br /> your business <br /> by design <br /> with
             technology.
           </h1>
-          <button className="group flex items-center justify-between w-full xl:w-1/2 text-neutral-800 hover:text-red-600">
+          <button className="group flex items-center justify-between w-full xl:w-1/2 text-neutral-950 hover:text-red-600">
             Sounds good, let’s talk
             <Arrow className="group-hover:translate-x-2 lg:-translate-x-4 group-hover:text-neutral-950 transition-all duration-200 ease-in-out" />
           </button>
         </div>
         <button
           onClick={() => scrollDownByPercentage(80)}
-          className="group flex items-center justify-between w-full xl:w-1/2 mb-12 text-neutral-800"
+          className="group flex items-center justify-between w-full xl:w-1/2 mb-12 text-neutral-950"
         >
           Tell me more
           <Arrow className="rotate-90 absolute translate-x-[calc(50vw-2.5rem)] lg:relative lg:translate-x-6 group-hover:translate-y-2 group-hover:text-red-600 transition-all duration-200 ease-in-out" />

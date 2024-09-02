@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import ServiceIllustration from "../components/svg/service-illustration";
 
@@ -16,7 +15,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   example,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const ServicecardRef = useRef<HTMLDivElement>(null);
+  const serviceCardRef = useRef<HTMLDivElement>(null);
 
   const illustrationName = title.toLowerCase();
 
@@ -31,20 +30,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       { threshold: 0.1 }
     );
 
-    if (ServicecardRef.current) {
-      observer.observe(ServicecardRef.current);
+    if (serviceCardRef.current) {
+      observer.observe(serviceCardRef.current);
     }
 
     return () => {
-      if (ServicecardRef.current) {
-        observer.unobserve(ServicecardRef.current);
+      if (serviceCardRef.current) {
+        observer.unobserve(serviceCardRef.current);
       }
     };
   }, []);
 
   return (
     <article
-      ref={ServicecardRef}
+      ref={serviceCardRef}
       className={`flex flex-col gap-16 relative transition-opacity duration-700 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
@@ -53,9 +52,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         <ServiceIllustration
           className="w-80 float-right md:-mr-12 -mr-16"
           name={illustrationName}
+          isVisible={isVisible}
         />
       </div>
-      <h2 className="-ml-1 relative text-6xl uppercase text-merino-950">{title}</h2>
+      <h2 className="-ml-1 relative text-6xl uppercase text-merino-950 text-shadow-outline shadow-merino-50/20">{title}</h2>
       <h3 className="text-lg text-merino-900 leading-snug mb-16">
         {subtitle}
       </h3>

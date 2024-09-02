@@ -38,7 +38,6 @@ export const metadata: Metadata = {
     ],
     siteName: "Hanaoka Design Studio",
   },
-  themeColor: "#f9f7f3", 
 };
 
 export default function RootLayout({
