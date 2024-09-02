@@ -61,7 +61,7 @@ const PrincipleCard: React.FC<PrincipleCardProps> = ({
       </div>
       <div>
         {description.map((desc, index) => (
-          <p key={index} className="text-lg text-gray-700 mb-4">
+          <p key={index} className="text-pretty text-lg text-gray-700 mb-4">
             {desc}
           </p>
         ))}

@@ -51,7 +51,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       return (
         <>
           <span>{firstPart}</span>
-          <span className="text-white">{secondPart}</span>
+          <span className="text-white sm:text-inherit">{secondPart}</span>
         </>
       );
     }
@@ -66,9 +66,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="absolute w-dvw -left-4 -top-56 -z-[1] overflow-hidden">
+      <div className="absolute w-dvw -left-4 -top-64 -z-[1] overflow-hidden">
         <ServiceIllustration
-          className="w-72 float-right -mr-12"
+          className="w-80 float-right -mr-16"
           name={illustrationName}
         />
       </div>
@@ -83,7 +83,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       <div>
         <p className="small-caps text-neutral-300 mb-4">For example</p>
         {example.map((line, index) => (
-          <p className="mb-4" key={index}>
+          <p className="text-pretty mb-4" key={index}>
             {line}
           </p>
         ))}

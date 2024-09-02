@@ -1,5 +1,6 @@
 import Services from "../components/services";
 import Principles from "../components/principles";
+import Arrow from "../components/svg/arrow";
 
 export default function Home() {
   return (
@@ -10,15 +11,21 @@ export default function Home() {
           technology.
         </h1>
         <div className="flex flex-col gap-16 mb-80">
-          <a>Sounds good, let’s talk</a>
-          <a>Tell me more</a>
+          <button className="flex items-center justify-between w-full">
+            Sounds good, let’s talk
+            <Arrow />
+          </button>
+          <button className="flex items-center justify-between w-full">
+            Tell me more
+            <Arrow className="rotate-90 absolute translate-x-[calc(50vw-2.5rem)]" />
+          </button>
         </div>
       </section>
       <Services />
       <Principles />
       <section id="#Why">
         <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mb-8">
-          I believe we can <br />  all do better.
+          I believe we can <br /> all do better.
           {/* I believe <br /> we can all <br /> do better. */}
         </h1>
         <p>
