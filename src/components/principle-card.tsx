@@ -55,7 +55,7 @@ const PrincipleCard: React.FC<PrincipleCardProps> = ({
     >
       <div className="relative mb-16">
         <h1 className="-ml-0.5 text-4xl relative z-10">{title}</h1>
-        <span className="absolute text-nowrap text-8xl text-gray-100 z-0 pl-2.5 -left-8 -top-8 w-dvw overflow-hidden"> 
+        <span className="absolute text-nowrap text-8xl text-gray-100 z-0 pl-2.5 -left-4 md:-left-8 -top-8 w-dvw overflow-hidden"> 
           {hiragana}
         </span>
       </div>
