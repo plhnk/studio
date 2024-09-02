@@ -37,8 +37,8 @@ export default function RootLayout({
         {/* grid-def */}
         <Navbar className="z-50" />
         {/* grid-def */}
-        <main className="col-span-full">{children}</main>
-        <footer className="mb-32">Designed &amp; Built in the PNW</footer>
+        <main className="col-span-full grid grid-cols-subgrid">{children}</main>
+        <footer className="mb-32 col-span-full">Designed &amp; Built in the PNW</footer>
         <Grid className="h-svh w-svw" />
       </body>
     </html>

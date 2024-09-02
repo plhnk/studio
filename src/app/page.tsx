@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <section
         id="Welcome"
-        className="h-dvh flex flex-col justify-between pb-3"
+        className="h-dvh flex flex-col justify-between pb-3 col-span-full"
       >
         <div className="flex flex-col gap-16 my-32">
           <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mt-8">
@@ -29,9 +29,9 @@ export default function Home() {
           <Arrow className="rotate-90 absolute translate-x-[calc(50vw-2.5rem)] group-hover:translate-y-2 group-hover:text-red-500 transition-all duration-200 ease-in-out" />
         </button>
       </section>
-      <Services />
-      <Principles />
-      <section id="Why">
+      <Services className='col-span-full md:col-span-4 md:col-start-2' />
+      <Principles className="col-span-full md:col-span-4 md:col-start-3" />
+      <section id="Why" className="col-span-full">
         <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mb-8">
           I believe we can <br /> all do better.
           {/* I believe <br /> we can all <br /> do better. */}

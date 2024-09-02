@@ -42,23 +42,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     };
   }, []);
 
-  // Helper function to split the title if needed
-  const renderTitle = () => {
-    if (title === "Develop" || title === "Maintain") {
-      const firstPart = title.slice(0, 5);
-      const secondPart = title.slice(5);
-
-      return (
-        <>
-          <span>{firstPart}</span>
-          <span className="text-white sm:text-inherit">{secondPart}</span>
-        </>
-      );
-    }
-
-    return title;
-  };
-
   return (
     <article
       ref={ServicecardRef}
@@ -66,13 +49,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="absolute w-dvw -left-4 -top-64 -z-[1] overflow-hidden">
+      <div className="absolute w-dvw md:w-fit md:right-0 md:left-auto md:overflow-visible -left-4 -top-64 -z-[1] overflow-hidden">
         <ServiceIllustration
-          className="w-80 float-right -mr-16"
+          className="w-80 float-right md:-mr-12 -mr-16"
           name={illustrationName}
         />
       </div>
-      <h2 className="-ml-1 relative text-6xl uppercase">{renderTitle()}</h2>
+      <h2 className="-ml-1 relative text-6xl uppercase">{title}</h2>
       <h3 className="text-lg text-neutral-500 leading-snug mb-16">
         {subtitle}
       </h3>
