@@ -46,7 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
       "transition-all duration-300 ease-in-out",
       isContact
         ? "bg-neutral-200/50 hover:bg-red-600 hover:text-white px-4 py-2 rounded-full mr-3"
-        : "hover:text-red-500 px-2.5",
+        : "hover:text-red-600 px-2.5",
       isContact && isHighlighted && "bg-red-600 text-white",
       isExpanded ? "" : ""
     );
@@ -93,7 +93,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         <li>
           <button
             onClick={toggleMenu}
-            className="bg-neutral-200/50 hover:bg-neutral-900 active:bg-neutral-400 text-neutral-800 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full"
+            className="bg-neutral-200/50 hover:bg-neutral-950 active:bg-neutral-400 text-neutral-950 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full"
           >
             Menu
           </button>
@@ -106,9 +106,9 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         >
           <button
             onClick={onPageNav("#Welcome", 0)}
-            className="group rounded-full p-2 bg-neutral-200/50 hover:bg-neutral-900"
+            className="group rounded-full p-2 bg-neutral-200/50 hover:bg-neutral-950"
           >
-            <MoveUp className="text-neutral-800 group-hover:text-white transition-all duration-200 ease-in-out" />
+            <MoveUp className="text-neutral-950 group-hover:text-white transition-all duration-200 ease-in-out" />
           </button>
         </li>
       </ul>

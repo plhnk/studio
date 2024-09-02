@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from "tailwindcss/types/config";
+
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
@@ -110,6 +112,13 @@ const config = {
       borderRadius: {
         xl: "1rem",
       },
+      textShadow: {
+        sm: "0 1px 2px var(--tw-shadow-color)",
+        DEFAULT: "0 2px 4px var(--tw-shadow-color)",
+        lg: "0 8px 16px var(--tw-shadow-color)",
+        outline:
+          "0 0px 16px var(--tw-shadow-color), 0 0px 16px var(--tw-shadow-color), 0 0px 32px var(--tw-shadow-color), 0 0px 8px var(--tw-shadow-color),0 0px 4px var(--tw-shadow-color)",
+      },
       backgroundImage: {
         "transparent-window":
           "linear-gradient(to right, rgb(var(--background)) 0%, rgb(var(--background)) 3%, transparent 15%, transparent 85%, rgb(var(--background)) 97%, rgb(var(--background)) 100%)",
@@ -156,6 +165,18 @@ const config = {
       },
     },
   },
+  plugins: [
+    plugin(function ({ matchUtilities, theme }: PluginAPI) {
+      matchUtilities(
+        {
+          "text-shadow": (value: string) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme("textShadow") }
+      );
+    }),
+  ],
 } satisfies Config;
 
 export default config;
