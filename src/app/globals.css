@@ -8,7 +8,7 @@
 }
 
 body {
-  background: rgb(var(--background-rgb));
+  background: (var(--merino-500));
 }
 
 @layer components {

@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     ],
     siteName: "Hanaoka Design Studio",
   },
+  themeColor: "#f9f7f3", 
 };
 
 export default function RootLayout({
@@ -48,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head></head>
-      <body className={fira_code.className + " main-grid py-8"}>
+      <body className={fira_code.className + " main-grid py-8 bg-merino-50"}>
         <Header className="fixed top-0 left-0 right-0 p-4 md:p-8 h-40 z-50 max-w-full" /> 
         {/* grid-def */}
         <Navbar className="z-50" />
