@@ -12,7 +12,7 @@ export default function Home() {
         className="h-dvh flex flex-col pb-3 col-span-full xl:col-span-10 xl:col-start-2" 
       >
         <div className="flex flex-col grow justify-center gap-16">
-          <h1 className="-ml-[.5vw] text-[9.6vw] xl:text-9xl leading-tight mt-8">
+          <h1 className="-ml-[.5vw] text-[9.6vw] xl:text-9xl leading-none mt-8">
             Sustainably grow <br /> your business <br /> by design <br /> with
             technology.
           </h1>
@@ -32,7 +32,7 @@ export default function Home() {
       <Services className="col-span-full md:col-span-4 md:col-start-2 lg:col-start-4" />
       <Principles className="col-span-full md:col-span-4 md:col-start-3 lg:col-start-5" />
       <section id="Why" className="col-span-full grid grid-cols-subgrid">
-        <h1 className="-ml-[.5vw] text-[9.6vw] leading-tight mb-8 col-span-full">
+        <h1 className="-ml-[.5vw] text-[9.6vw] leading-none mb-8 col-span-full">
           I believe we can <br /> all do better.
         </h1>
         <div className='flex flex-col gap-4 col-span-3'>

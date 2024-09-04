@@ -4,6 +4,7 @@ import { cn, onPageNav, isScrolledPast } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import { MoveUp } from "lucide-react";
+import ContactButton from "./contact";
 
 interface NavbarProps {
   children?: React.ReactNode;
@@ -45,10 +46,9 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
     const itemClass = cn(
       "transition-all duration-300 ease-in-out",
       isContact
-        ? "bg-neutral-200/50 hover:bg-red-600 hover:text-white px-4 py-2 rounded-full mr-3 sm:mr-8"
+        ? "bg-neutral-200/50 hover:bg-red-600 hover:text-white px-4 py-2 rounded-full mr-1 sm:mr-8"
         : "hover:text-red-600 px-2.5",
-      isContact && isHighlighted && "bg-red-600 text-white",
-      isExpanded ? "" : ""
+      isContact && isHighlighted && "bg-red-600 text-white"
     );
 
     return (
@@ -57,12 +57,16 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         className={cn(
           "transition-all duration-300 ease-in-out",
           isExpanded
-            ? "max-w-fit opacity-100 translate-x-0 max-h-auto"
+            ? "max-w-fit opacity-100 translate-x-0 max-h-auto flex items-center"
             : "max-w-0 overflow-hidden opacity-0 translate-x-[20px] max-h-0"
         )}
       >
         {isContact ? (
-          <button className={itemClass}>{item.label}</button>
+          <ContactButton
+            email="studio@hanaoka.co"
+            label={item.label}
+            className={itemClass}
+          />
         ) : (
           <Link
             onClick={onPageNav(item.href, 200)}
@@ -86,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
       <ul
         className={
           (cn("transition-all duration-500 ease-in-out"),
-          isExpanded ? "flex items-center" : "block")
+          isExpanded ? "flex items-stretch" : "block")
         }
       >
         {navItems.map(renderNavItem)}
@@ -95,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
             onClick={toggleMenu}
             className={cn(
               "bg-neutral-200/50 hover:bg-neutral-950 active:bg-neutral-400 text-neutral-950 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full",
-              isExpanded && "ml-8"
+              isExpanded && "sm:ml-8"
             )}
           >
             Menu

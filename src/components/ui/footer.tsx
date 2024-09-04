@@ -13,7 +13,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
     <footer className={cn(`my-32 md:mb-1 text-neutral-600`, className)}>
       <p className="">
         Designed &amp; Built in the PNW{" "}
-        <span className="text-neutral-300">|</span>{" "}
+        <span className="text-neutral-300 invisible block sm:visible sm:inline">|</span>{" "}
         <Link href="https://paul.hanaoka.co">plhnk</Link> ©️ {year}
       </p>
     </footer>
