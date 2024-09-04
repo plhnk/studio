@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 
 const Grid = ({ className }: { className?: string }) => {
   const baseBorder = `border-l border-r border-neutral-200 h-full w-full`;
+  const smBorder = `hidden sm:block ${baseBorder}`;
   const mdBorders = `hidden md:block ${baseBorder}`;
   const lgBorders = `hidden lg:block ${baseBorder}`;
   const xlBorders = `hidden xl:block ${baseBorder}`;
@@ -17,7 +18,8 @@ const Grid = ({ className }: { className?: string }) => {
         <div className={baseBorder} />
         <div className={baseBorder} />
 
-        <div className={mdBorders} />
+        <div className={smBorder} />
+
         <div className={mdBorders} />
         <div className={mdBorders} />
 

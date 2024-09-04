@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
     const itemClass = cn(
       "transition-all duration-300 ease-in-out",
       isContact
-        ? "bg-neutral-200/50 hover:bg-red-600 hover:text-white px-4 py-2 rounded-full mr-3"
+        ? "bg-neutral-200/50 hover:bg-red-600 hover:text-white px-4 py-2 rounded-full mr-3 sm:mr-8"
         : "hover:text-red-600 px-2.5",
       isContact && isHighlighted && "bg-red-600 text-white",
       isExpanded ? "" : ""
@@ -79,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
   return (
     <nav
       className={cn(
-        "p-1 backdrop-blur-md rounded-full outline outline-1 outline-neutral-100 -outline-offset-1 fixed bottom-4 ml-4 right-2",
+        "p-1 backdrop-blur-md rounded-full outline outline-1 outline-neutral-100 -outline-offset-1 fixed bottom-4 md:bottom-6 ml-4 right-2 md:right-4",
         className
       )}
     >
@@ -93,7 +93,10 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         <li>
           <button
             onClick={toggleMenu}
-            className="bg-neutral-200/50 hover:bg-neutral-950 active:bg-neutral-400 text-neutral-950 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full"
+            className={cn(
+              "bg-neutral-200/50 hover:bg-neutral-950 active:bg-neutral-400 text-neutral-950 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full",
+              isExpanded && "ml-8"
+            )}
           >
             Menu
           </button>
@@ -117,3 +120,4 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
 };
 
 export default Navbar;
+// add gradient blur to top for seamless mobile browsing (transparent to theme-color) --> maybe add to progressive blur component?

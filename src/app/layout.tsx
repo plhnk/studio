@@ -4,6 +4,7 @@ import "./globals.css";
 import Grid from "../components/grid";
 import Header from "../components/ui/header";
 import Navbar from "../components/ui/navbar";
+import Footer from "../components/ui/footer";
 
 const fira_code = Fira_Code({
   subsets: ["latin"],
@@ -54,7 +55,7 @@ export default function RootLayout({
         <Navbar className="z-50" />
         {/* grid-def */}
         <main className="col-span-full grid grid-cols-subgrid">{children}</main>
-        <footer className="mb-32 col-span-full">Designed &amp; Built in the PNW</footer>
+        <Footer className='col-span-full' />
         <Grid className="h-screen w-screen" />
       </body>
     </html>

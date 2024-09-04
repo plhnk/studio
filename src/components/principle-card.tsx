@@ -47,19 +47,19 @@ const PrincipleCard: React.FC<PrincipleCardProps> = ({
   };
 
   return (
-    <section
+    <article
       ref={cardRef}
       className={`flex flex-col gap-16 relative transition-opacity duration-700 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="relative mb-16">
+      <div className="relative mb-4 h-40 -ml-4 pl-4 py-12 w-screen md:w-full overflow-hidden">
         <h1 className="-ml-0.5 text-4xl relative z-10">{title}</h1>
-        <span className="absolute text-nowrap text-8xl text-merino-100 z-0 pl-2.5 -left-4 md:-left-8 -top-8 w-dvw overflow-hidden"> 
+        <span className="absolute text-nowrap text-8xl text-neutral-200 z-0 pl-2.5 -left-4 top-4">
           {hiragana}
         </span>
       </div>
-      <div>
+      <div className='pr-2'>
         {description.map((desc, index) => (
           <p key={index} className="text-pretty text-lg text-neutral-700 mb-4">
             {desc}
@@ -67,7 +67,7 @@ const PrincipleCard: React.FC<PrincipleCardProps> = ({
         ))}
       </div>
       <p className="text-md text-neutral-800">{parseBoldText(summary)}</p>
-    </section>
+    </article>
   );
 };
 

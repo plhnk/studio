@@ -2,18 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
-}
-
 body {
   background: (var(--merino-500));
 }
 
 @layer components {
   .main-grid {
-    @apply grid grid-cols-3 gap-4 md:gap-8 px-4 md:px-8 -z-10 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12;
+    @apply grid grid-cols-3 gap-4 md:gap-8 px-4 md:px-8 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12;
     /* grid-def */
   }
 }
@@ -25,11 +20,5 @@ body {
   .small-caps {
     @apply text-sm font-semibold uppercase tracking-widest;
     font-variant-caps: small-caps;
-  }
-}
-
-@layer base {
-  :root {
-    --radius: 0.5rem;
   }
 }
