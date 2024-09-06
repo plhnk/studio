@@ -35,7 +35,7 @@ export default function Contact() {
     })();
   }, []);
   return (
-    <div className="col-span-full lg:col-span-6 lg:col-start-2 xl:col-span-8 xl:col-start-3 bg-merino-50/20 backdrop-blur-sm mt-[18vh] py-16 z-10 outline-1 outline-neutral-200 -outline-offset-1 outline flex items-center">
+    <div className="col-span-full lg:col-span-6 lg:col-start-2 xl:col-span-8 xl:col-start-3 bg-merino-50/20 backdrop-blur-sm mt-32 lg:mt-64 mb-72 py-16 z-10 outline-1 outline-neutral-200 -outline-offset-1 outline flex items-center">
       <Cal
         className="w-full md:mt-16"
         namespace="30min"
