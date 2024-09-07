@@ -71,7 +71,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
           />
         ) : (
           <Link
-            onClick={onPageNav(item.href, 200)}
+            onClick={onPageNav(item.href, 400)}
             href={item.href}
             className={itemClass}
           >
@@ -115,7 +115,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
             )}
           >
             <button
-              onClick={onPageNav("#Welcome", 0)}
+              onClick={onPageNav("#Welcome", 700)}
               className="group rounded-full p-2 bg-neutral-200/50 hover:bg-neutral-950"
             >
               <MoveUp className="text-neutral-950 group-hover:text-white transition-all duration-200 ease-in-out" />

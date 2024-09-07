@@ -7,8 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export function smoothScrollTo(
   targetPosition: number,
-  offset: number = 0,
-  duration: number = 500
+  duration: number = 500,
+  offset: number = 0
 ) {
   const startPosition = window.scrollY;
   const adjustedTargetPosition = targetPosition - offset;
@@ -37,15 +37,16 @@ export function scrollDownByPercentage(
   percentage: number,
   duration: number = 500
 ) {
-  const targetPosition =
-    window.scrollY + window.innerHeight * (percentage / 100);
+  const scrollDistance = (window.innerHeight * percentage) / 100;
+  const targetPosition = scrollDistance;
+
   smoothScrollTo(targetPosition, duration);
 }
 
 export function onPageNav(
   href: string,
-  offset: number = 0,
-  duration: number = 500
+  duration: number = 500,
+  offset: number = 0
 ) {
   return (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ export function onPageNav(
     if (targetElement) {
       const targetPosition =
         targetElement.getBoundingClientRect().top + window.scrollY;
-      smoothScrollTo(targetPosition, offset, duration);
+      smoothScrollTo(targetPosition, duration, offset);
     }
   };
 }
@@ -68,10 +69,10 @@ export const isScrolledPast = (percentage: number): boolean => {
 
 export function getDateInfo() {
   const date = new Date();
-  const year = date.toLocaleDateString('en-US', { year: 'numeric' });
-  const month = date.toLocaleDateString('en-US', { month: 'long' });
-  const today = date.toLocaleDateString('en-US', { day: 'numeric' });
-  const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+  const year = date.toLocaleDateString("en-US", { year: "numeric" });
+  const month = date.toLocaleDateString("en-US", { month: "long" });
+  const today = date.toLocaleDateString("en-US", { day: "numeric" });
+  const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
   const dayOfWeekNo = date.getDay();
   const remainingDays =
     new Date(date.getFullYear(), 11, 31).getTime() - date.getTime();

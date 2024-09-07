@@ -26,7 +26,7 @@ export default function Home() {
           </Link>
         </div>
         <button
-          onClick={() => scrollDownByPercentage(80)}
+          onClick={() => scrollDownByPercentage(84)}
           className="group flex items-center justify-between w-full md:w-1/2 mb-12 text-neutral-950"
         >
           Tell me more
