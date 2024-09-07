@@ -48,9 +48,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="absolute w-dvw md:w-fit md:right-0 md:left-auto md:overflow-visible -left-4 -top-64 -z-[1] overflow-hidden">
+      <div className="absolute w-dvw md:w-fit md:right-0 md:left-auto md:overflow-visible -left-4 -top-36 sm:-top-64 -z-[1] overflow-hidden">
         <ServiceIllustration
-          className="w-80 float-right md:-mr-12 -mr-16"
+          className="w-56 sm:w-80 float-right md:-mr-12 sm:-mr-16 -mr-24"
           name={illustrationName}
           isVisible={isVisible}
         />

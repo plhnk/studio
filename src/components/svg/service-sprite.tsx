@@ -16,13 +16,13 @@ const ServiceSprite: React.FC = () => {
         <g filter="url(#dropShadow)">
           <path className="fill-merino-50" d="M37 57h172v223H37z" />
         </g>
-        <circle cx="16" cy="87" r="8" className="fill-merino-950" />
+        <circle cx="32" cy="120" r="8" className="fill-merino-950" />
         <circle cx="173" cy="26" r="8" className="fill-merino-950" />
-        <circle cx="148" cy="316" r="8" className="fill-neutral-200" />
-        <circle cx="226" cy="184" r="8" className="fill-merino-950" />
-        <circle cx="24" cy="284" r="8" className="fill-neutral-300" />
-        <circle cx="31" cy="11" r="8" className="fill-neutral-950" />
-        <circle cx="215" cy="269" r="8" className="fill-neutral-500" />
+        <circle cx="148" cy="328" r="8" className="fill-neutral-200" />
+        <circle cx="140" cy="124" r="8" className="fill-merino-950" />
+        <circle cx="8" cy="260" r="8" className="fill-neutral-300" />
+        <circle cx="80" cy="180" r="8" className="fill-neutral-950" />
+        <circle cx="212" cy="220" r="8" className="fill-neutral-500" />
       </symbol>
 
       <symbol id="design" viewBox="0 0 246 337">
