@@ -119,12 +119,12 @@ type CoordinateSetKey =
   | "expanded-up" // HA / NA / O / KA / DE / SIGN / STU / DI / O --> UP
   | "expanded-down"; // HA / NA / O / KA / DE / SIGN / STU / DI / O --> DOWN
 
-const SCROLL_THRESHOLD = 0.8; // 80% scroll threshold
 const EXPANDED_DELAY = 800; // delay to expand after scrolling stops
+const PAUSE_TRANSITION_DURATION = 500;
 
 interface AnimatedLogoProps {
   className?: string;
-  initialState?: LogoState; // Allow developers to set the initial state
+  initialState?: LogoState;
 }
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
@@ -135,44 +135,34 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   const [progress, setProgress] = useState(0);
   const [currentRandomSet, setCurrentRandomSet] =
     useState<CoordinateSetKey>("normal");
+  const [previousSet, setPreviousSet] = useState<CoordinateSetKey>("normal");
   const logoRef = useRef<HTMLDivElement>(null);
   const lastScrollTime = useRef(Date.now());
   const expandedTimer = useRef<NodeJS.Timeout | null>(null);
-
-  const cycleStates = () => {
-    const stateOrder: LogoState[] = [
-      "initial",
-      "expanded",
-      "scrolling-down",
-      "scrolling-pause",
-      "scrolling-up",
-    ];
-    const currentIndex = stateOrder.indexOf(state);
-    const nextIndex = (currentIndex + 1) % stateOrder.length;
-    setState(stateOrder[nextIndex]);
-  };
+  const animationFrameRef = useRef<number | null>(null);
 
   const logoOptions: CoordinateSetKey[] = [
     "normal",
     "collapsed",
     "descending-grid",
   ];
+
   const getCoordinateSet = (state: LogoState): CoordinateSetKey => {
     switch (state) {
       case "initial":
       case "expanded":
+      // return "expanded-down";
       case "scrolling-pause":
         return currentRandomSet;
       case "scrolling-down":
         return "expanded-up";
-      // return "normal";
       case "scrolling-up":
         return "expanded-down";
       default:
         return "normal";
-      // return "collapsed";
     }
   };
+
   useEffect(() => {
     if (["initial", "expanded", "scrolling-pause"].includes(state)) {
       setCurrentRandomSet(getRandom(logoOptions));
@@ -184,9 +174,32 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
+  const animateToTarget = (target: number, duration: number) => {
+    const startTime = performance.now();
+    const startProgress = progress;
+
+    const animate = (currentTime: number) => {
+      const elapsedTime = currentTime - startTime;
+      if (elapsedTime < duration) {
+        const newProgress =
+          startProgress + (target - startProgress) * (elapsedTime / duration);
+        setProgress(newProgress);
+        animationFrameRef.current = requestAnimationFrame(animate);
+      } else {
+        setProgress(target);
+      }
+    };
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    animationFrameRef.current = requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
     let scrollTimer: NodeJS.Timeout | null = null;
+    const scrollDistance = window.innerHeight;
 
     const handleScroll = () => {
       if (logoRef.current) {
@@ -194,7 +207,13 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         const now = Date.now();
         lastScrollTime.current = now;
 
-        // Determine scroll direction
+        const scrollDiff = currentScrollY - lastScrollY;
+        const newProgress = Math.max(
+          0,
+          Math.min(1, progress + scrollDiff / scrollDistance)
+        );
+        setProgress(newProgress);
+
         if (currentScrollY > lastScrollY) {
           setState("scrolling-down");
         } else if (currentScrollY < lastScrollY) {
@@ -203,35 +222,27 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
         lastScrollY = currentScrollY;
 
-        // Clear existing timers
         if (scrollTimer) clearTimeout(scrollTimer);
         if (expandedTimer.current) clearTimeout(expandedTimer.current);
 
-        // Set timer for scroll pause
         scrollTimer = setTimeout(() => {
           setState("scrolling-pause");
+          animateToTarget(1, PAUSE_TRANSITION_DURATION);
         }, 500);
 
-        // Calculate progress (if needed)
-        const rect = logoRef.current.getBoundingClientRect();
-        const scrollStart = window.innerHeight;
-        const scrollEnd = scrollStart - rect.height;
-        if (rect.top <= scrollStart && rect.top >= scrollEnd) {
-          const scrollProgress =
-            (scrollStart - rect.top) / (scrollStart - scrollEnd);
-          setProgress(scrollProgress);
-        } else if (rect.top > scrollStart) {
-          setProgress(0);
-        } else {
-          setProgress(1);
-        }
-
-        // Set timer for expanded state
         expandedTimer.current = setTimeout(() => {
           if (Date.now() - lastScrollTime.current >= EXPANDED_DELAY) {
             setState("expanded");
           }
         }, EXPANDED_DELAY);
+
+        if (
+          currentScrollY <= 0 ||
+          currentScrollY + window.innerHeight >=
+            document.documentElement.scrollHeight
+        ) {
+          setState("expanded");
+        }
       }
     };
 
@@ -240,24 +251,37 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       window.removeEventListener("scroll", handleScroll);
       if (scrollTimer) clearTimeout(scrollTimer);
       if (expandedTimer.current) clearTimeout(expandedTimer.current);
+      if (animationFrameRef.current)
+        cancelAnimationFrame(animationFrameRef.current);
     };
-  }, []);
+  }, [progress]);
+
+  useEffect(() => {
+    if (state !== "scrolling-down" && state !== "scrolling-up") {
+      setPreviousSet(getCoordinateSet(state));
+    }
+  }, [state]);
 
   const getChunkStyle = (chunk: Chunk, index: number) => {
     const currentSet = getCoordinateSet(state);
     const targetPosition = chunk.coordinateSets[currentSet];
-    const previousSet = getCoordinateSet(
-      state === "initial" ? "initial" : "expanded"
-    );
-    const previousPosition = chunk.coordinateSets[previousSet];
+    let startSet: CoordinateSetKey = previousSet;
 
+    if (
+      state === "scrolling-down" ||
+      // state === "scrolling-up" ||
+      state === "scrolling-pause"
+    ) {
+      startSet = previousSet;
+    } else if (state === "scrolling-up") {
+      startSet = getCoordinateSet(state);
+    }
+
+    const startPosition = chunk.coordinateSets[startSet];
     const x =
-      previousPosition[0] +
-      (targetPosition[0] - previousPosition[0]) * progress;
+      startPosition[0] + (targetPosition[0] - startPosition[0]) * progress;
     const y =
-      previousPosition[1] +
-      (targetPosition[1] - previousPosition[1]) * progress;
-    const delay = `${index * 100}ms`; // Stagger animation based on index
+      startPosition[1] + (targetPosition[1] - startPosition[1]) * progress;
 
     return {
       display: "inline-block",
@@ -265,22 +289,14 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       left: `${x}ch`,
       top: `${y}em`,
       transition:
-        state === "initial" ? "none" : `all 0.5s ease-in-out ${delay}`,
+        state === "scrolling-down" || state === "scrolling-up"
+          ? "none"
+          : `all 0.5s ease-in-out ${index * 100}ms`,
     };
   };
 
-  const handleClick = () => {
-    cycleStates();
-    // console.log(state, "state");
-    // console.log(getCoordinateSet(state), "coordinate set");
-  };
-
   return (
-    <div
-      ref={logoRef}
-      onClick={handleClick}
-      className={cn("cursor-pointer", className)}
-    >
+    <div ref={logoRef} className={cn("cursor-pointer", className)}>
       {LOGO_STRUCTURE.map((chunk, index) => (
         <span
           key={index}
@@ -302,3 +318,4 @@ export default AnimatedLogo;
 // TODOs
 // tweak logo scroll animation: idea -> tie animation to scroll for set amount of value, something like equal to height of logo? that way it feels like user controls the animation
 // add hover for logo --> when its expanded, collapse it --> when it's collapsed, expand it
+// what the FFFF why wont the logo animate nicely when scrolling up 
