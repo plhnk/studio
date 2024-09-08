@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         direction="top"
         className="absolute inset-0 h-[120%] z-0"
       />
-      <AnimatedLogo className="w-[8ch] h-[6em] relative" />
+      <AnimatedLogo initialState="expanded" className="w-[8ch] h-[6em] relative" />
     </header>
   );
 };

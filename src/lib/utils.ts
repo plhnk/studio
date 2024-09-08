@@ -98,3 +98,7 @@ export function getDateInfo() {
     percentageOfYearPassed: percentageOfYearPassed.toFixed(0),
   };
 }
+
+export const getRandom = <T>(items: T[]): T => {
+  return items[Math.floor(Math.random() * items.length)];
+};

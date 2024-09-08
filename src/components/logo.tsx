@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn, getRandom } from "@/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
 
 type ChunkPosition = [number, number];
@@ -20,6 +20,7 @@ const LOGO_STRUCTURE: Chunk[] = [
       "expanded-up": [0, 3], // logo state
       "descending-grid": [0, 0],
       "expanded-down": [0, 0],
+      normal: [0, 0],
       collapsed: [0, 0],
     },
   },
@@ -27,8 +28,9 @@ const LOGO_STRUCTURE: Chunk[] = [
     letters: "NA",
     coordinateSets: {
       "expanded-up": [2, 2],
-      "descending-grid": [1, 1],
+      "descending-grid": [2, 0],
       "expanded-down": [1, 1],
+      normal: [2, 0],
       collapsed: [2, 0],
     },
   },
@@ -36,8 +38,9 @@ const LOGO_STRUCTURE: Chunk[] = [
     letters: "O",
     coordinateSets: {
       "expanded-up": [4, 1],
-      "descending-grid": [2, 2],
+      "descending-grid": [3, 1],
       "expanded-down": [2, 2],
+      normal: [4, 0],
       collapsed: [4, 0],
     },
   },
@@ -45,8 +48,9 @@ const LOGO_STRUCTURE: Chunk[] = [
     letters: "KA",
     coordinateSets: {
       "expanded-up": [5, 0],
-      "descending-grid": [3, 3],
+      "descending-grid": [4, 1],
       "expanded-down": [3, 3],
+      normal: [5, 0],
       collapsed: [5, 0],
     },
   },
@@ -54,60 +58,66 @@ const LOGO_STRUCTURE: Chunk[] = [
     letters: "DE",
     coordinateSets: {
       "expanded-up": [1, 4],
-      "descending-grid": [0, 4],
+      "descending-grid": [0, 2],
       "expanded-down": [0, 4],
-      collapsed: [0, 1],
+      normal: [0, 1],
+      collapsed: [1, 1],
     },
   },
   {
     letters: "SIGN",
     coordinateSets: {
       "expanded-up": [3, 3],
-      "descending-grid": [1, 5],
+      "descending-grid": [2, 2],
       "expanded-down": [1, 5],
-      collapsed: [2, 1],
+      normal: [2, 1],
+      collapsed: [3, 1],
     },
   },
   {
     letters: "STU",
     coordinateSets: {
       "expanded-up": [2, 5],
-      "descending-grid": [0, 6],
+      "descending-grid": [0, 3],
       "expanded-down": [0, 6],
-      collapsed: [0, 2],
+      normal: [1, 2],
+      collapsed: [2, 2],
     },
   },
   {
     letters: "DI",
     coordinateSets: {
       "expanded-up": [5, 4],
-      "descending-grid": [1, 7],
+      "descending-grid": [3, 3],
       "expanded-down": [1, 7],
-      collapsed: [3, 2],
+      normal: [4, 2],
+      collapsed: [5, 2],
     },
   },
   {
     letters: "O",
     coordinateSets: {
       "expanded-up": [7, 3],
-      "descending-grid": [2, 8],
+      "descending-grid": [5, 3],
       "expanded-down": [2, 8],
-      collapsed: [5, 2],
+      normal: [6, 2],
+      collapsed: [7, 2],
     },
   },
 ];
 
 type LogoState =
-  | "initial"
-  | "expanded"
-  | "scrolling-start"
-  | "scrolling-mid"
-  | "scrolling-end";
+  | "initial" // --> normal | collapsed | descending-grid
+  | "expanded" // --> normal | collapsed | descending-grid
+  | "scrolling-down" // --> expanded-up
+  | "scrolling-up" // --> expanded-down
+  | "scrolling-pause"; // --> normal | collapsed | descending-grid
 type CoordinateSetKey =
-  | "expanded-up"
-  | "descending-grid"
-  | "expanded-down"
-  | "collapsed";
+  | "normal" // HANAOKA / DESIGN / _STUDIO
+  | "collapsed" // HANAOKA / _DESIGN / __STUDIO
+  | "descending-grid" // HANA / OKA / DESIGN / STUDIO
+  | "expanded-up" // HA / NA / O / KA / DE / SIGN / STU / DI / O --> UP
+  | "expanded-down"; // HA / NA / O / KA / DE / SIGN / STU / DI / O --> DOWN
 
 const SCROLL_THRESHOLD = 0.8; // 80% scroll threshold
 const EXPANDED_DELAY = 800; // delay to expand after scrolling stops
@@ -123,6 +133,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 }) => {
   const [state, setState] = useState<LogoState>(initialState);
   const [progress, setProgress] = useState(0);
+  const [currentRandomSet, setCurrentRandomSet] =
+    useState<CoordinateSetKey>("normal");
   const logoRef = useRef<HTMLDivElement>(null);
   const lastScrollTime = useRef(Date.now());
   const expandedTimer = useRef<NodeJS.Timeout | null>(null);
@@ -131,54 +143,90 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     const stateOrder: LogoState[] = [
       "initial",
       "expanded",
-      "scrolling-start",
-      "scrolling-mid",
-      "scrolling-end",
+      "scrolling-down",
+      "scrolling-pause",
+      "scrolling-up",
     ];
     const currentIndex = stateOrder.indexOf(state);
     const nextIndex = (currentIndex + 1) % stateOrder.length;
     setState(stateOrder[nextIndex]);
   };
 
+  const logoOptions: CoordinateSetKey[] = [
+    "normal",
+    "collapsed",
+    "descending-grid",
+  ];
+  const getCoordinateSet = (state: LogoState): CoordinateSetKey => {
+    switch (state) {
+      case "initial":
+      case "expanded":
+      case "scrolling-pause":
+        return currentRandomSet;
+      case "scrolling-down":
+        return "expanded-up";
+      // return "normal";
+      case "scrolling-up":
+        return "expanded-down";
+      default:
+        return "normal";
+      // return "collapsed";
+    }
+  };
   useEffect(() => {
-    const timer = setTimeout(() => setState("expanded"), 500);
+    if (["initial", "expanded", "scrolling-pause"].includes(state)) {
+      setCurrentRandomSet(getRandom(logoOptions));
+    }
+  }, [state]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setState("expanded"), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let scrollTimer: NodeJS.Timeout | null = null;
+
     const handleScroll = () => {
       if (logoRef.current) {
+        const currentScrollY = window.scrollY;
         const now = Date.now();
         lastScrollTime.current = now;
 
+        // Determine scroll direction
+        if (currentScrollY > lastScrollY) {
+          setState("scrolling-down");
+        } else if (currentScrollY < lastScrollY) {
+          setState("scrolling-up");
+        }
+
+        lastScrollY = currentScrollY;
+
+        // Clear existing timers
+        if (scrollTimer) clearTimeout(scrollTimer);
+        if (expandedTimer.current) clearTimeout(expandedTimer.current);
+
+        // Set timer for scroll pause
+        scrollTimer = setTimeout(() => {
+          setState("scrolling-pause");
+        }, 500);
+
+        // Calculate progress (if needed)
         const rect = logoRef.current.getBoundingClientRect();
         const scrollStart = window.innerHeight;
         const scrollEnd = scrollStart - rect.height;
-
         if (rect.top <= scrollStart && rect.top >= scrollEnd) {
           const scrollProgress =
             (scrollStart - rect.top) / (scrollStart - scrollEnd);
           setProgress(scrollProgress);
-
-          if (scrollProgress < 0.1) {
-            setState("scrolling-start");
-          } else if (scrollProgress > SCROLL_THRESHOLD) {
-            setState("scrolling-end");
-          } else {
-            setState("scrolling-mid");
-          }
         } else if (rect.top > scrollStart) {
           setProgress(0);
-          setState("expanded");
         } else {
           setProgress(1);
-          setState("scrolling-end");
         }
 
-        if (expandedTimer.current) {
-          clearTimeout(expandedTimer.current);
-        }
-
+        // Set timer for expanded state
         expandedTimer.current = setTimeout(() => {
           if (Date.now() - lastScrollTime.current >= EXPANDED_DELAY) {
             setState("expanded");
@@ -190,26 +238,10 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (expandedTimer.current) {
-        clearTimeout(expandedTimer.current);
-      }
+      if (scrollTimer) clearTimeout(scrollTimer);
+      if (expandedTimer.current) clearTimeout(expandedTimer.current);
     };
   }, []);
-
-  const getCoordinateSet = (state: LogoState): CoordinateSetKey => {
-    switch (state) {
-      case "initial":
-        return "expanded-up";
-      case "expanded":
-        return "expanded-up";
-      case "scrolling-start":
-        return "descending-grid";
-      case "scrolling-mid":
-        return "expanded-down";
-      case "scrolling-end":
-        return "collapsed";
-    }
-  };
 
   const getChunkStyle = (chunk: Chunk, index: number) => {
     const currentSet = getCoordinateSet(state);
@@ -239,8 +271,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   const handleClick = () => {
     cycleStates();
-    console.log(state, "state");
-    console.log(getCoordinateSet(state), "coordinate set");
+    // console.log(state, "state");
+    // console.log(getCoordinateSet(state), "coordinate set");
   };
 
   return (
@@ -270,4 +302,3 @@ export default AnimatedLogo;
 // TODOs
 // tweak logo scroll animation: idea -> tie animation to scroll for set amount of value, something like equal to height of logo? that way it feels like user controls the animation
 // add hover for logo --> when its expanded, collapse it --> when it's collapsed, expand it
-// add dev feature so dev can set state for designing
