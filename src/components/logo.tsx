@@ -20,10 +20,8 @@ const LOGO_STRUCTURE: Chunk[] = logoData as unknown as Chunk[]; // Cast the impo
 type LogoState =
   | "initial" // Initial state (before page loads).
   | "default" // Default state ==> random loop of 3 coordinate sets (normal, collapsed, descendingGrid).
-  // | "expanded" // Expanded version of the logo. ==> should be default
   | "scrolling-down" // When scrolling down the page.
   | "scrolling-up"; // When scrolling up the page.
-// | "scrolling-pause"; // Paused state when scrolling stops. ==> should be default
 
 type CoordinateSetKey =
   | "normal" // Default logo layout.
@@ -33,8 +31,6 @@ type CoordinateSetKey =
   | "expandedDown"; // Expanded downwards animation.
 
 const initialLoadDelay = 800; // wait this long to load the logo when the page first loads
-// const EXPANDED_DELAY = 800; // Time delay (in ms) before switching to the expanded state.
-// const PAUSE_TRANSITION_DURATION = 500; // Duration of the animation when scrolling pauses.
 
 interface AnimatedLogoProps {
   className?: string; // Optional className for additional styling.
@@ -95,11 +91,6 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     }
   }, [state]);
 
-  // Effect that starts the logo in an expanded state after 1 second. ==> get rid of this
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setState("expanded"), 1000); // Expands the logo after a 1-second delay.
-  //   return () => clearTimeout(timer); // Clean up the timer if the component unmounts.
-  // }, []);
   useEffect(() => {
     const timer = setTimeout(() => setState("default"), initialLoadDelay); // animate in on initial load
     return () => clearTimeout(timer); // Clean up the timer if the component unmounts.
@@ -156,23 +147,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
         lastScrollY = currentScrollY; // Update the last scroll Y position.
 
-        // if (scrollTimer) clearTimeout(scrollTimer); // Clear any existing scroll timers.
-        // if (expandedTimer.current) clearTimeout(expandedTimer.current); // Clear any existing expand timers.
-
-        // // Timer to detect if scrolling has paused.
-        // scrollTimer = setTimeout(() => {
-        //   setState("scrolling-pause"); // Change to pause state.
-        //   animateToTarget(1, PAUSE_TRANSITION_DURATION); // Animate the logo to its final state.
-        // }, 500);
-
-        // // Timer to transition to expanded state after scrolling stops.
-        // expandedTimer.current = setTimeout(() => {
-        //   if (Date.now() - lastScrollTime.current >= EXPANDED_DELAY) {
-        //     setState("expanded"); // Expand the logo after the delay.
-        //   }
-        // }, EXPANDED_DELAY);
-
-        // If the user reaches the top or bottom of the page, set the logo to expanded.
+        // When user reaches the top or bottom of the page, set the logo to default.
         if (
           currentScrollY <= 0 ||
           currentScrollY + window.innerHeight >=
@@ -207,8 +182,6 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
     if (
       state === "scrolling-down" ||
-      // state === "scrolling-up" ||
-      // state === "scrolling-pause"
       state === "default"
     ) {
       startSet = previousSet;
