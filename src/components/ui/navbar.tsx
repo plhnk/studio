@@ -56,10 +56,9 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
       isContact && isHighlighted && "bg-red-600 text-white"
     );
     const handleNavItemClick = (e: React.MouseEvent | React.TouchEvent) => {
-      onPageNav(item.href, 400)(e);
+      onPageNav(item.href, 400)(e as React.MouseEvent);
       trackEvent("Navbar Item Button Click");
     };
-    
 
     return (
       <li
@@ -79,8 +78,8 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
           />
         ) : (
           <Link
-            onClick={handleNavItemClick}
-            // onClick={onPageNav(item.href, 400)}
+            onClick={(e: React.MouseEvent) => handleNavItemClick(e)}
+            onTouchStart={(e: React.TouchEvent) => handleNavItemClick(e)}
             href={item.href}
             className={itemClass}
           >
