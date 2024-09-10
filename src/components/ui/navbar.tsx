@@ -6,6 +6,8 @@ import React from "react";
 import { MoveLeft, MoveUp } from "lucide-react";
 import ContactButton from "./contact";
 import { usePathname } from "next/navigation";
+import { useFathomEvent } from "@/hooks/useFathom";
+import { on } from "events";
 
 interface NavbarProps {
   children?: React.ReactNode;
@@ -41,6 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const { trackEvent } = useFathomEvent();
   const toggleMenu = () => setIsExpanded(!isExpanded);
 
   const renderNavItem = (item: NavItem, index: number) => {
@@ -52,6 +55,11 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         : "hover:text-red-600 px-2.5",
       isContact && isHighlighted && "bg-red-600 text-white"
     );
+    const handleNavItemClick = (e: React.MouseEvent | React.TouchEvent) => {
+      onPageNav(item.href, 400)(e);
+      trackEvent("Navbar Item Button Click");
+    };
+    
 
     return (
       <li
@@ -71,7 +79,8 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
           />
         ) : (
           <Link
-            onClick={onPageNav(item.href, 400)}
+            onClick={handleNavItemClick}
+            // onClick={onPageNav(item.href, 400)}
             href={item.href}
             className={itemClass}
           >
@@ -80,6 +89,11 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
         )}
       </li>
     );
+  };
+
+  const handleMenuClick = () => {
+    trackEvent("Navbar Menu Button Click");
+    toggleMenu();
   };
 
   return (
@@ -99,7 +113,7 @@ const Navbar: React.FC<NavbarProps> = ({ children, className }) => {
           {navItems.map(renderNavItem)}
           <li>
             <button
-              onClick={toggleMenu}
+              onClick={handleMenuClick}
               className={cn(
                 "bg-neutral-200/50 hover:bg-neutral-950 active:bg-neutral-400 text-neutral-950 hover:text-white transition-colors duration-200 px-4 py-2 rounded-full",
                 isExpanded && "sm:ml-8"

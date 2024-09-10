@@ -1,6 +1,7 @@
 "use client";
 import { cn, getRandom } from "@/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
+import { useFathomEvent } from "@/hooks/useFathom";
 
 type ChunkPosition = [number, number];
 
@@ -162,6 +163,11 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
         return "normal";
     }
   };
+  const { trackEvent } = useFathomEvent();
+
+  const handleLogoClick: React.MouseEventHandler<HTMLElement> = (event) => {
+    trackEvent("Logo Click");
+  };
 
   useEffect(() => {
     if (["initial", "expanded", "scrolling-pause"].includes(state)) {
@@ -296,7 +302,11 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   };
 
   return (
-    <div ref={logoRef} className={cn("cursor-pointer", className)}>
+    <figure
+      onClick={handleLogoClick}
+      ref={logoRef}
+      className={cn("cursor-pointer", className)}
+    >
       {LOGO_STRUCTURE.map((chunk, index) => (
         <span
           key={index}
@@ -310,7 +320,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
           {chunk.letters}
         </span>
       ))}
-    </div>
+    </figure>
   );
 };
 
@@ -318,4 +328,4 @@ export default AnimatedLogo;
 // TODOs
 // tweak logo scroll animation: idea -> tie animation to scroll for set amount of value, something like equal to height of logo? that way it feels like user controls the animation
 // add hover for logo --> when its expanded, collapse it --> when it's collapsed, expand it
-// what the FFFF why wont the logo animate nicely when scrolling up 
+// what the FFFF why wont the logo animate nicely when scrolling up

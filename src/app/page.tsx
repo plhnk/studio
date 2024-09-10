@@ -4,8 +4,14 @@ import Principles from "../components/principles";
 import Arrow from "../components/svg/arrow";
 import { scrollDownByPercentage } from "@/lib/utils";
 import Link from "next/link";
+import { useFathomEvent } from "@/hooks/useFathom";
 
 export default function Home() {
+  const { trackEvent } = useFathomEvent();
+  const handleScrollClick = () => {
+    trackEvent("Homepage Scroll Button Click");
+    scrollDownByPercentage(84);
+  };
   return (
     <>
       <section
@@ -26,7 +32,7 @@ export default function Home() {
           </Link>
         </div>
         <button
-          onClick={() => scrollDownByPercentage(84)}
+          onClick={handleScrollClick}
           className="group flex items-center justify-between w-full md:w-1/2 mb-12 text-neutral-950"
         >
           Tell me more
