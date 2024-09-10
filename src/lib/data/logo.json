@@ -1,0 +1,92 @@
+[
+  {
+    "letters": "HA",
+    "coordinateSets": {
+      "expandedUp": [0, 3],
+      "descendingGrid": [0, 0],
+      "expandedDown": [0, 0],
+      "normal": [0, 0],
+      "collapsed": [0, 0]
+    }
+  },
+  {
+    "letters": "NA",
+    "coordinateSets": {
+      "expandedUp": [2, 2],
+      "descendingGrid": [2, 0],
+      "expandedDown": [1, 1],
+      "normal": [2, 0],
+      "collapsed": [2, 0]
+    }
+  },
+  {
+    "letters": "O",
+    "coordinateSets": {
+      "expandedUp": [4, 1],
+      "descendingGrid": [3, 1],
+      "expandedDown": [2, 2],
+      "normal": [4, 0],
+      "collapsed": [4, 0]
+    }
+  },
+  {
+    "letters": "KA",
+    "coordinateSets": {
+      "expandedUp": [5, 0],
+      "descendingGrid": [4, 1],
+      "expandedDown": [3, 3],
+      "normal": [5, 0],
+      "collapsed": [5, 0]
+    }
+  },
+  {
+    "letters": "DE",
+    "coordinateSets": {
+      "expandedUp": [1, 4],
+      "descendingGrid": [0, 2],
+      "expandedDown": [0, 4],
+      "normal": [0, 1],
+      "collapsed": [1, 1]
+    }
+  },
+  {
+    "letters": "SIGN",
+    "coordinateSets": {
+      "expandedUp": [3, 3],
+      "descendingGrid": [2, 2],
+      "expandedDown": [1, 5],
+      "normal": [2, 1],
+      "collapsed": [3, 1]
+    }
+  },
+  {
+    "letters": "STU",
+    "coordinateSets": {
+      "expandedUp": [2, 5],
+      "descendingGrid": [0, 3],
+      "expandedDown": [0, 6],
+      "normal": [1, 2],
+      "collapsed": [2, 2]
+    }
+  },
+  {
+    "letters": "DI",
+    "coordinateSets": {
+      "expandedUp": [5, 4],
+      "descendingGrid": [3, 3],
+      "expandedDown": [1, 7],
+      "normal": [4, 2],
+      "collapsed": [5, 2]
+    }
+  },
+  {
+    "letters": "O",
+    "coordinateSets": {
+      "expandedUp": [7, 3],
+      "descendingGrid": [5, 3],
+      "expandedDown": [2, 8],
+      "normal": [6, 2],
+      "collapsed": [7, 2]
+    }
+  }
+]

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import ProgressiveBlur from "@/lib/utilities/progressive-blur";
+// import AnimatedLogo from "../logo-alt";
 import AnimatedLogo from "../logo";
 import Grid from "../grid";
 
@@ -14,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         direction="top"
         className="absolute inset-0 h-[120%] z-0"
       />
-      <AnimatedLogo initialState="expanded" className="w-[8ch] h-[6em] relative" />
+      <AnimatedLogo className="w-[8ch] h-[6em] relative" />
     </header>
   );
 };
