@@ -43,7 +43,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 }) => {
   const [state, setState] = useState<LogoState>(initialState); // Tracks the current state of the logo.
   const [progress, setProgress] = useState(0); // Progress of the current animation (0-1 range).
-  const [currentPositions, setCurrentPositions] = useState<ChunkPosition[]>([]);
+  // const [currentPositions, setCurrentPositions] = useState<ChunkPosition[]>([]);
+  const currentPositionsRef = useRef<ChunkPosition[]>([]);
   const [currentRandomSet, setCurrentRandomSet] =
     useState<CoordinateSetKey>("normal"); // The current layout set for the logo (randomly selected).
   const [previousSet, setPreviousSet] = useState<CoordinateSetKey>("normal"); // Tracks the previous layout set to animate between transitions.
@@ -100,13 +101,22 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setState("default");
-      setCurrentPositions(
-        LOGO_STRUCTURE.map((chunk) => chunk.coordinateSets.normal)
+      currentPositionsRef.current = LOGO_STRUCTURE.map(
+        (chunk) => chunk.coordinateSets.normal
       );
     }, initialLoadDelay);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      currentPositionsRef.current = LOGO_STRUCTURE.map((chunk, index) => {
+        const style = getChunkStyle(chunk, index);
+        return [parseFloat(style.left), parseFloat(style.top)];
+      });
+    });
+  }, [state, progress]);
+  
   // Effect to handle scrolling and animate the logo based on scroll direction.
   useEffect(() => {
     let lastScrollY = window.scrollY; // Store the last Y position of the scroll.
@@ -159,19 +169,63 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     }
   }, [state]);
 
+  // const getChunkStyle = (chunk: Chunk, index: number) => {
+  //   const currentSet = getCoordinateSet(state);
+  //   const targetPosition = chunk.coordinateSets[currentSet];
+  //   let startPosition: ChunkPosition;
+
+  //   if (state === "scrolling-up" && currentPositions[index]) {
+  //     startPosition = currentPositions[index];
+  //   } else {
+  //     const startSet =
+  //       state === "scrolling-down" || state === "default"
+  //         ? previousSet
+  //         : getCoordinateSet(state);
+  //     startPosition = chunk.coordinateSets[startSet];
+  //   }
+
+  //   const x =
+  //     startPosition[0] + (targetPosition[0] - startPosition[0]) * progress;
+  //   const y =
+  //     startPosition[1] + (targetPosition[1] - startPosition[1]) * progress;
+
+  //   // Update current position
+  //   if (
+  //     currentPositions[index]?.[0] !== x ||
+  //     currentPositions[index]?.[1] !== y
+  //   ) {
+  //     const newPositions = [...currentPositions];
+  //     newPositions[index] = [x, y];
+  //     setCurrentPositions(newPositions);
+  //   }
+
+  //   return {
+  //     display: "inline-block",
+  //     position: "absolute" as const,
+  //     left: `${x}ch`,
+  //     top: `${y}em`,
+  //     transition:
+  //       state === "scrolling-down" || state === "scrolling-up"
+  //         ? "none"
+  //         : `all 0.5s ease-in-out ${index * 100}ms`,
+  //   };
+  // };
   const getChunkStyle = (chunk: Chunk, index: number) => {
     const currentSet = getCoordinateSet(state);
     const targetPosition = chunk.coordinateSets[currentSet];
     let startPosition: ChunkPosition;
 
-    if (state === "scrolling-up" && currentPositions[index]) {
-      startPosition = currentPositions[index];
+    if (state === "scrolling-up" || state === "scrolling-down") {
+      // Always use current position when scrolling
+      startPosition =
+        currentPositionsRef.current[index] || chunk.coordinateSets[previousSet];
+    } else if (state === "default") {
+      // When transitioning to default, start from the current position
+      startPosition =
+        currentPositionsRef.current[index] || chunk.coordinateSets[currentSet];
     } else {
-      const startSet =
-        state === "scrolling-down" || state === "default"
-          ? previousSet
-          : getCoordinateSet(state);
-      startPosition = chunk.coordinateSets[startSet];
+      // For other states (like initial), use the coordinate set directly
+      startPosition = chunk.coordinateSets[currentSet];
     }
 
     const x =
@@ -179,15 +233,8 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     const y =
       startPosition[1] + (targetPosition[1] - startPosition[1]) * progress;
 
-    // Update current position
-    if (
-      currentPositions[index]?.[0] !== x ||
-      currentPositions[index]?.[1] !== y
-    ) {
-      const newPositions = [...currentPositions];
-      newPositions[index] = [x, y];
-      setCurrentPositions(newPositions);
-    }
+    // Update current position in the ref
+    currentPositionsRef.current[index] = [x, y];
 
     return {
       display: "inline-block",
