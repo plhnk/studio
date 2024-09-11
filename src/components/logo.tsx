@@ -17,24 +17,15 @@ interface Chunk {
 
 const LOGO_STRUCTURE: Chunk[] = logoData as unknown as Chunk[];
 
-type LogoState =
-  | "initial" // Initial state (before page loads).
-  | "default" // Default state ==> random loop of 3 coordinate sets (normal, collapsed, descendingGrid).
-  | "scrolling-down" // When scrolling down the page.
-  | "scrolling-up"; // When scrolling up the page.
-
 type CoordinateSetKey =
-  | "normal" // Default logo layout.
-  | "collapsed" // Compressed layout of the logo.
-  | "descendingGrid" // Grid-like layout for animation.
-  | "expandedUp" // Expanded upwards animation.
-  | "expandedDown"; // Expanded downwards animation.
-
-const initialLoadDelay = 600; // wait this long to load the logo when the page first loads
+  | "normal"
+  | "collapsed"
+  | "descendingGrid"
+  | "expandedUp"
+  | "expandedDown";
 
 interface AnimatedLogoProps {
   className?: string;
-  initialState?: LogoState;
 }
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
@@ -43,6 +34,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const { trackEvent } = useFathomEvent();
   const logoRef = useRef<HTMLDivElement>(null);
+  const [isNearBoundary, setIsNearBoundary] = useState(false);
 
   const logoOptions: CoordinateSetKey[] = [
     "normal",
@@ -50,8 +42,29 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
     "descendingGrid",
   ];
 
+  // Smoothly adjust scroll progress and transition to random at boundaries
+  const updateScrollTarget = (scrollY: number, maxScroll: number) => {
+    const distanceFromTop = scrollY;
+    const distanceFromBottom = maxScroll - scrollY;
+
+    // Smooth transition back to random layout near the boundaries
+    if (distanceFromTop < 1000 || distanceFromBottom < 1000) {
+      setIsNearBoundary(true);
+      if (distanceFromTop < 300 || distanceFromBottom < 300) {
+        setTargetSet(getRandom(logoOptions)); // Smoothly change at boundaries
+      }
+    } else {
+      setIsNearBoundary(false);
+    }
+
+    // Interpolate scroll progress based on how far from top/bottom we are
+    const progress = distanceFromTop < 1000 || distanceFromBottom < 1000
+      ? 1 - Math.min(distanceFromTop, distanceFromBottom) / 1000
+      : 1;
+    setScrollProgress(progress);
+  };
+
   useEffect(() => {
-    // Initialize current positions
     currentPositionsRef.current = LOGO_STRUCTURE.map(
       (chunk) => chunk.coordinateSets.normal
     );
@@ -62,31 +75,20 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
-    const scrollDistance = window.innerHeight;
+    const maxScrollHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDiff = currentScrollY - lastScrollY;
 
-      // Update scroll progress
-      setScrollProgress((prev) =>
-        Math.max(0, Math.min(1, prev + scrollDiff / scrollDistance))
-      );
+      updateScrollTarget(currentScrollY, maxScrollHeight);
 
-      // Set target based on scroll direction
-      if (scrollDiff > 0) {
+      // Scroll direction: up or down
+      if (scrollDiff > 0 && !isNearBoundary) {
         setTargetSet("expandedUp");
-      } else if (scrollDiff < 0) {
+      } else if (scrollDiff < 0 && !isNearBoundary) {
         setTargetSet("expandedDown");
-      }
-
-      // Check if at top or bottom of page
-      if (
-        currentScrollY <= 0 ||
-        currentScrollY + window.innerHeight >=
-          document.documentElement.scrollHeight
-      ) {
-        setTargetSet(getRandom(logoOptions));
       }
 
       lastScrollY = currentScrollY;
@@ -94,11 +96,11 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isNearBoundary]);
 
   const handleLogoClick = () => {
     trackEvent("Logo Click");
-    setTargetSet(getRandom(logoOptions));
+    setTargetSet(getRandom(logoOptions)); // Randomly switch coordinate sets
   };
 
   const getChunkStyle = (chunk: Chunk, index: number) => {
@@ -106,6 +108,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
     const startPosition =
       currentPositionsRef.current[index] || chunk.coordinateSets.normal;
 
+    // Interpolate chunk positions based on scroll progress
     const x =
       startPosition[0] +
       (targetPosition[0] - startPosition[0]) * scrollProgress;
@@ -113,7 +116,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
       startPosition[1] +
       (targetPosition[1] - startPosition[1]) * scrollProgress;
 
-    // Update current position
+    // Update current position reference
     currentPositionsRef.current[index] = [x, y];
 
     return {
@@ -121,7 +124,10 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
       position: "absolute" as const,
       left: `${x}ch`,
       top: `${y}em`,
-      transition: "none", // Always tied to scroll, so no CSS transitions
+      transition: isNearBoundary
+        ? "transform 1s ease-in-out" // Smooth at boundaries
+        : "transform 0.5s ease-out", // Smooth transitions between states
+      transform: `translate(${x}px, ${y}px)`, // Apply smooth animation
     };
   };
 
@@ -141,7 +147,3 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ className }) => {
 };
 
 export default AnimatedLogo;
-// TODOs
-// tweak logo scroll animation: idea -> tie animation to scroll for set amount of value, something like equal to height of logo? that way it feels like user controls the animation
-// add hover for logo --> when its expanded, collapse it --> when it's collapsed, expand it
-// what the FFFF why wont the logo animate nicely when scrolling up
