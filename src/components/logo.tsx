@@ -1,21 +1,21 @@
 "use client";
-import { cn, getRandom } from "@/lib/utils"; // Utility functions for className concatenation (cn) and generating a random item (getRandom).
+import { cn, getRandom } from "@/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
-import { useFathomEvent } from "@/hooks/useFathom"; // Custom hook for tracking events with Fathom Analytics.
-import logoData from "@/lib/data/logo.json"; // Import logo structure data from a JSON file.
+import { useFathomEvent } from "@/hooks/useFathom";
+import logoData from "@/lib/data/logo.json";
 
-type ChunkPosition = [number, number]; // Defines a tuple representing X and Y coordinates.
+type ChunkPosition = [number, number];
 
 interface CoordinateSet {
-  [key: string]: ChunkPosition; // Each key represents a specific layout, with a value being its coordinates.
+  [key: string]: ChunkPosition;
 }
 
 interface Chunk {
-  letters: string; // The text (letters) associated with the chunk of the logo.
-  coordinateSets: CoordinateSet; // A set of coordinates for each layout.
+  letters: string;
+  coordinateSets: CoordinateSet;
 }
 
-const LOGO_STRUCTURE: Chunk[] = logoData as unknown as Chunk[]; // Cast the imported JSON data into a Chunk array.
+const LOGO_STRUCTURE: Chunk[] = logoData as unknown as Chunk[];
 
 type LogoState =
   | "initial" // Initial state (before page loads).
@@ -30,11 +30,11 @@ type CoordinateSetKey =
   | "expandedUp" // Expanded upwards animation.
   | "expandedDown"; // Expanded downwards animation.
 
-const initialLoadDelay = 800; // wait this long to load the logo when the page first loads
+const initialLoadDelay = 600; // wait this long to load the logo when the page first loads
 
 interface AnimatedLogoProps {
-  className?: string; // Optional className for additional styling.
-  initialState?: LogoState; // Optional initial state for the logo.
+  className?: string;
+  initialState?: LogoState;
 }
 
 const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
@@ -43,28 +43,25 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 }) => {
   const [state, setState] = useState<LogoState>(initialState); // Tracks the current state of the logo.
   const [progress, setProgress] = useState(0); // Progress of the current animation (0-1 range).
+  const [currentPositions, setCurrentPositions] = useState<ChunkPosition[]>([]);
   const [currentRandomSet, setCurrentRandomSet] =
     useState<CoordinateSetKey>("normal"); // The current layout set for the logo (randomly selected).
   const [previousSet, setPreviousSet] = useState<CoordinateSetKey>("normal"); // Tracks the previous layout set to animate between transitions.
   const logoRef = useRef<HTMLDivElement>(null); // Reference to the logo container DOM element.
   const lastScrollTime = useRef(Date.now()); // Stores the time of the last scroll event.
-  const expandedTimer = useRef<NodeJS.Timeout | null>(null); // Timer for expanding the logo after scrolling stops.
-  const animationFrameRef = useRef<number | null>(null); // Reference for managing animation frames (requestAnimationFrame).
-  const { trackEvent } = useFathomEvent(); // Initialize Fathom Analytics event tracking.
-
+  const { trackEvent } = useFathomEvent();
   const logoOptions: CoordinateSetKey[] = [
     "normal",
     "collapsed",
     "descendingGrid",
-  ]; // Possible random logo layouts for static states (initial, expanded, paused).
+  ]; // Possible random logo layouts for static states (initial, default).
+  const [clickCount, setClickCount] = useState(0);
 
   // Determines which coordinate set to use based on the current state.
   const getCoordinateSet = (state: LogoState): CoordinateSetKey => {
     switch (state) {
       case "initial":
       case "default":
-        // case "expanded":
-        // case "scrolling-pause":
         return currentRandomSet; // Use a randomly selected set for these states.
       case "scrolling-down":
         return "expandedUp"; // Use the expanded-up layout while scrolling down.
@@ -77,53 +74,43 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
 
   // Handles clicks on the logo and tracks the event with Fathom.
   const handleLogoClick: React.MouseEventHandler<HTMLElement> = () => {
-    setCurrentRandomSet(getRandom(logoOptions));
+    console.log("Logo clicked");
     trackEvent("Logo Click");
-    console.log("clicked");
-    console.log(setCurrentRandomSet);
+    setClickCount((prevCount) => {
+      console.log("Updating click count:", prevCount + 1);
+      return prevCount + 1;
+    });
   };
 
-  // Effect to change the random layout set whenever the state changes.
   useEffect(() => {
-    // if (["initial", "expanded", "scrolling-pause"].includes(state)) {
-    if (["initial", "default"].includes(state)) {
-      setCurrentRandomSet(getRandom(logoOptions)); // Select a random layout when in these states.
+    console.log("Effect triggered. State:", state, "Click count:", clickCount);
+    if (["initial", "default"].includes(state) || clickCount > 0) {
+      const newRandomSet = getRandom(logoOptions);
+      console.log("New random set:", newRandomSet);
+      setCurrentRandomSet(newRandomSet);
+      setClickCount(0);
     }
-  }, [state]);
+  }, [state, clickCount]);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setState("default"), initialLoadDelay); // animate in on initial load
+  //   return () => clearTimeout(timer); // Clean up the timer if the component unmounts.
+  // }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setState("default"), initialLoadDelay); // animate in on initial load
-    return () => clearTimeout(timer); // Clean up the timer if the component unmounts.
+    const timer = setTimeout(() => {
+      setState("default");
+      setCurrentPositions(
+        LOGO_STRUCTURE.map((chunk) => chunk.coordinateSets.normal)
+      );
+    }, initialLoadDelay);
+    return () => clearTimeout(timer);
   }, []);
-
-  // Animates the progress from the current value to a target value over a specific duration.
-  const animateToTarget = (target: number, duration: number) => {
-    const startTime = performance.now(); // Records the start time of the animation.
-    const startProgress = progress; // Stores the initial progress value.
-
-    // Recursive animation function.
-    const animate = (currentTime: number) => {
-      const elapsedTime = currentTime - startTime; // Time elapsed since the animation started.
-      if (elapsedTime < duration) {
-        const newProgress =
-          startProgress + (target - startProgress) * (elapsedTime / duration); // Linear interpolation between start and target.
-        setProgress(newProgress); // Updates the animation progress.
-        animationFrameRef.current = requestAnimationFrame(animate); // Request the next frame of the animation.
-      } else {
-        setProgress(target); // Ensure we reach the target progress.
-      }
-    };
-
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current); // Cancel any ongoing animation if one exists.
-    }
-    animationFrameRef.current = requestAnimationFrame(animate); // Start a new animation frame.
-  };
 
   // Effect to handle scrolling and animate the logo based on scroll direction.
   useEffect(() => {
     let lastScrollY = window.scrollY; // Store the last Y position of the scroll.
-    let scrollTimer: NodeJS.Timeout | null = null; // Timer for detecting scroll pause.
+    // let scrollTimer: NodeJS.Timeout | null = null; // Timer for detecting scroll pause. ==> remove scroll pause for now
     const scrollDistance = window.innerHeight; // Full screen height, used to normalize scroll distance.
 
     const handleScroll = () => {
@@ -161,10 +148,7 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
     window.addEventListener("scroll", handleScroll); // Add scroll event listener.
     return () => {
       window.removeEventListener("scroll", handleScroll); // Remove scroll event listener on cleanup.
-      if (scrollTimer) clearTimeout(scrollTimer); // Clear the scroll timer on cleanup.
-      if (expandedTimer.current) clearTimeout(expandedTimer.current); // Clear the expand timer on cleanup.
-      if (animationFrameRef.current)
-        cancelAnimationFrame(animationFrameRef.current); // Cancel any ongoing animations on cleanup.
+      // if (scrollTimer) clearTimeout(scrollTimer); // Clear the scroll timer on cleanup.
     };
   }, [progress]);
 
@@ -178,22 +162,32 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
   const getChunkStyle = (chunk: Chunk, index: number) => {
     const currentSet = getCoordinateSet(state);
     const targetPosition = chunk.coordinateSets[currentSet];
-    let startSet: CoordinateSetKey = previousSet;
+    let startPosition: ChunkPosition;
 
-    if (
-      state === "scrolling-down" ||
-      state === "default"
-    ) {
-      startSet = previousSet;
-    } else if (state === "scrolling-up") {
-      startSet = getCoordinateSet(state);
+    if (state === "scrolling-up" && currentPositions[index]) {
+      startPosition = currentPositions[index];
+    } else {
+      const startSet =
+        state === "scrolling-down" || state === "default"
+          ? previousSet
+          : getCoordinateSet(state);
+      startPosition = chunk.coordinateSets[startSet];
     }
 
-    const startPosition = chunk.coordinateSets[startSet];
     const x =
       startPosition[0] + (targetPosition[0] - startPosition[0]) * progress;
     const y =
       startPosition[1] + (targetPosition[1] - startPosition[1]) * progress;
+
+    // Update current position
+    if (
+      currentPositions[index]?.[0] !== x ||
+      currentPositions[index]?.[1] !== y
+    ) {
+      const newPositions = [...currentPositions];
+      newPositions[index] = [x, y];
+      setCurrentPositions(newPositions);
+    }
 
     return {
       display: "inline-block",
