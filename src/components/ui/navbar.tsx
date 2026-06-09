@@ -7,7 +7,6 @@ import { MoveLeft, MoveUp } from "lucide-react";
 import ContactButton from "./contact";
 import { usePathname } from "next/navigation";
 import { useFathomEvent } from "@/hooks/useFathom";
-import { on } from "events";
 
 interface NavbarProps {
   children?: React.ReactNode;

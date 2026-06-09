@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Fira_Code, Fira_Sans } from "next/font/google";
 import "./globals.css";
 import Grid from "../components/grid";
@@ -52,10 +53,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <Analytics />
-      </head>
       <body className={fira_code.className + " main-grid py-8 bg-merino-50"}>
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         <Header className="fixed top-0 left-0 right-0 p-4 md:p-8 h-40 z-50 max-w-full" />
         {/* grid-def */}
         <Navbar className="z-50" />
